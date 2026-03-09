@@ -1,0 +1,21 @@
+{
+  "timeZone": "Etc/UTC",
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/script.external_request"
+  ],
+  "dataStudio": {
+    "name": "CookieScript Connector",
+    "logoUrl": "https://www.cookie-script.com/images/cookie.png",
+    "company": "CookieScript",
+    "companyUrl": "https://www.cookie-cript.com",
+    "addonUrl": "https://www.cookie-cript.com",
+    "supportUrl": "https://www.cookie-script.com",
+    "description": "CookieScript data connector for Looker Studio."
+  },
+  "webapp": {
+    "executeAs": "USER_DEPLOYING",
+    "access": "ANYONE_ANONYMOUS"
+  }
+}

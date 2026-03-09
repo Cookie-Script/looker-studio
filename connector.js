@@ -15,6 +15,7 @@ function getConfig() {
     .setId("apiToken")
     .setName("API Token (Bearer)")
     .setPlaceholder("Enter your API Key")
+    .setHelpText("Find this in your Cookie-Script account settings.")
     .setAllowOverride(true);
 
   config
@@ -22,6 +23,7 @@ function getConfig() {
     .setId("itemId")
     .setName("Item ID (Hash)")
     .setPlaceholder("e.g. c0db4b49e05321b0...")
+    .setHelpText("The unique hash ID for the cookie banner.")
     .setAllowOverride(true);
 
   config.setDateRangeRequired(true);
@@ -38,12 +40,14 @@ function getFields() {
     .newDimension()
     .setId("day")
     .setName("Date")
+    .setDescription("The date of the tracked actions.")
     .setType(types.YEAR_MONTH_DAY);
 
   fields
     .newMetric()
     .setId("shown")
     .setName("Banner Shown")
+    .setDescription("Number of times the cookie banner was displayed.")
     .setType(types.NUMBER)
     .setAggregation(aggregations.SUM);
 
@@ -51,6 +55,7 @@ function getFields() {
     .newMetric()
     .setId("accepted")
     .setName("Banner Accepted")
+    .setDescription("Number of times the banner was explicitly accepted.")
     .setType(types.NUMBER)
     .setAggregation(aggregations.SUM);
 
@@ -58,6 +63,7 @@ function getFields() {
     .newMetric()
     .setId("declined")
     .setName("Banner Declined")
+    .setDescription("Number of times the banner was explicitly declined.")
     .setType(types.NUMBER)
     .setAggregation(aggregations.SUM);
 
@@ -65,6 +71,7 @@ function getFields() {
     .newMetric()
     .setId("action_accept")
     .setName("Action: Accept")
+    .setDescription("Count of 'Accept' button clicks.")
     .setType(types.NUMBER)
     .setAggregation(aggregations.SUM);
 
@@ -72,6 +79,7 @@ function getFields() {
     .newMetric()
     .setId("action_reject")
     .setName("Action: Reject")
+    .setDescription("Count of 'Reject' button clicks.")
     .setType(types.NUMBER)
     .setAggregation(aggregations.SUM);
 
@@ -79,6 +87,7 @@ function getFields() {
     .newMetric()
     .setId("action_readmore")
     .setName("Action: Read More")
+    .setDescription("Count of 'Read More' interactions.")
     .setType(types.NUMBER)
     .setAggregation(aggregations.SUM);
 
@@ -86,6 +95,7 @@ function getFields() {
     .newMetric()
     .setId("action_close")
     .setName("Action: Close")
+    .setDescription("Count of times the banner was closed without explicit choice.")
     .setType(types.NUMBER)
     .setAggregation(aggregations.SUM);
 
@@ -93,6 +103,7 @@ function getFields() {
     .newMetric()
     .setId("action_manage")
     .setName("Action: Manage")
+    .setDescription("Count of 'Manage Settings' interactions.")
     .setType(types.NUMBER)
     .setAggregation(aggregations.SUM);
 
@@ -100,6 +111,7 @@ function getFields() {
     .newMetric()
     .setId("action_total")
     .setName("Action: Total")
+    .setDescription("Total number of tracked user actions.")
     .setType(types.NUMBER)
     .setAggregation(aggregations.SUM);
 
@@ -107,6 +119,7 @@ function getFields() {
     .newMetric()
     .setId("cat_functionality")
     .setName("Category: Functionality")
+    .setDescription("Consent count for Functionality cookies.")
     .setType(types.NUMBER)
     .setAggregation(aggregations.SUM);
 
@@ -114,6 +127,7 @@ function getFields() {
     .newMetric()
     .setId("cat_targeting")
     .setName("Category: Targeting")
+    .setDescription("Consent count for Targeting cookies.")
     .setType(types.NUMBER)
     .setAggregation(aggregations.SUM);
 
@@ -121,6 +135,7 @@ function getFields() {
     .newMetric()
     .setId("cat_performance")
     .setName("Category: Performance")
+    .setDescription("Consent count for Performance cookies.")
     .setType(types.NUMBER)
     .setAggregation(aggregations.SUM);
 
@@ -128,6 +143,7 @@ function getFields() {
     .newMetric()
     .setId("cat_unclassified")
     .setName("Category: Unclassified")
+    .setDescription("Consent count for Unclassified cookies.")
     .setType(types.NUMBER)
     .setAggregation(aggregations.SUM);
 
@@ -135,6 +151,7 @@ function getFields() {
     .newMetric()
     .setId("total_accept_rate")
     .setName("Accept Rate")
+    .setDescription("Overall accept rate as a percentage.")
     .setType(types.NUMBER)
     .setAggregation(aggregations.MAX);
 
@@ -142,6 +159,7 @@ function getFields() {
     .newMetric()
     .setId("total_reject_rate")
     .setName("Reject Rate")
+    .setDescription("Overall reject rate as a percentage.")
     .setType(types.NUMBER)
     .setAggregation(aggregations.MAX);
 
@@ -149,6 +167,7 @@ function getFields() {
     .newMetric()
     .setId("total_ignore_rate")
     .setName("Ignore Rate")
+    .setDescription("Overall ignore rate as a percentage.")
     .setType(types.NUMBER)
     .setAggregation(aggregations.MAX);
 
@@ -156,6 +175,7 @@ function getFields() {
     .newMetric()
     .setId("total_accept_count")
     .setName("Accept Count")
+    .setDescription("Overall total accept count.")
     .setType(types.NUMBER)
     .setAggregation(aggregations.MAX);
 
@@ -163,6 +183,7 @@ function getFields() {
     .newMetric()
     .setId("total_reject_count")
     .setName("Reject Count")
+    .setDescription("Overall total reject count.")
     .setType(types.NUMBER)
     .setAggregation(aggregations.MAX);
 
@@ -170,6 +191,7 @@ function getFields() {
     .newMetric()
     .setId("total_shown_count")
     .setName("Shown Count")
+    .setDescription("Overall total banner shown count.")
     .setType(types.NUMBER)
     .setAggregation(aggregations.MAX);
 
@@ -186,8 +208,8 @@ function getData(request) {
   const apiToken = (request.configParams?.apiToken || "").trim();
   const itemId = (request.configParams?.itemId || "").trim();
 
-  if (!apiToken) throw new Error("Missing API Token");
-  if (!itemId) throw new Error("Missing Item ID");
+  if (!apiToken) communityConnector.newUserError().setText("Missing API Token").throwException();
+  if (!itemId) communityConnector.newUserError().setText("Missing Item ID").throwException();
 
   const dateRange = request.dateRange || {};
   let startDate = dateRange.startDate || "";
@@ -227,7 +249,10 @@ function getData(request) {
   const body = resp.getContentText();
 
   if (code !== 200) {
-    throw new Error(`API Error HTTP ${code}: ${body}`);
+    communityConnector.newUserError()
+      .setText(`API request failed. HTTP Status: ${code}`)
+      .setDebugText(body)
+      .throwException();
   }
 
   let payload;
@@ -235,11 +260,16 @@ function getData(request) {
   try {
     payload = JSON.parse(body);
   } catch (e) {
-    throw new Error(`API returned non-JSON body: ${body}`);
+    communityConnector.newUserError()
+      .setText("Invalid response from API (expected JSON).")
+      .setDebugText(`Body: ${body}`)
+      .throwException();
   }
 
   if (!payload.success) {
-    throw new Error(`API Error: ${payload.message || "Unknown error"}`);
+    communityConnector.newUserError()
+      .setText(`API Error: ${payload.message || "Unknown error"}`)
+      .throwException();
   }
 
   const data = payload.data || {};
