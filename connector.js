@@ -1,4 +1,5 @@
 const communityConnector = DataStudioApp.createCommunityConnector();
+const BASE_URL = "https://t6.cookie-script.com";
 
 function getAuthType() {
   return communityConnector
@@ -31,6 +32,26 @@ function getConfig() {
   return config.build();
 }
 
+function addMetric(fields, id, name, description, aggregation) {
+  return fields
+    .newMetric()
+    .setId(id)
+    .setName(name)
+    .setDescription(description)
+    .setType(communityConnector.FieldType.NUMBER)
+    .setAggregation(aggregation);
+}
+
+function addPercentMetric(fields, id, name, description, aggregation) {
+  return fields
+    .newMetric()
+    .setId(id)
+    .setName(name)
+    .setDescription(description)
+    .setType(communityConnector.FieldType.PERCENT)
+    .setAggregation(aggregation);
+}
+
 function getFields() {
   const fields = communityConnector.getFields();
   const types = communityConnector.FieldType;
@@ -43,157 +64,25 @@ function getFields() {
     .setDescription("The date of the tracked actions.")
     .setType(types.YEAR_MONTH_DAY);
 
-  fields
-    .newMetric()
-    .setId("shown")
-    .setName("Banner Shown")
-    .setDescription("Number of times the cookie banner was displayed.")
-    .setType(types.NUMBER)
-    .setAggregation(aggregations.SUM);
+  addMetric(fields, "shown", "Banner Shown", "Number of times the cookie banner was displayed.", aggregations.SUM);
+  addMetric(fields, "accepted", "Banner Accepted", "Number of times the banner was explicitly accepted.", aggregations.SUM);
+  addMetric(fields, "declined", "Banner Declined", "Number of times the banner was explicitly declined.", aggregations.SUM);
 
-  fields
-    .newMetric()
-    .setId("accepted")
-    .setName("Banner Accepted")
-    .setDescription("Number of times the banner was explicitly accepted.")
-    .setType(types.NUMBER)
-    .setAggregation(aggregations.SUM);
+  addMetric(fields, "action_accept", "Action: Accept", "Count of 'Accept' button clicks.", aggregations.SUM);
+  addMetric(fields, "action_reject", "Action: Reject", "Count of 'Reject' button clicks.", aggregations.SUM);
+  addMetric(fields, "action_readmore", "Action: Read More", "Count of 'Read More' interactions.", aggregations.SUM);
+  addMetric(fields, "action_close", "Action: Close", "Count of times the banner was closed without explicit choice.", aggregations.SUM);
+  addMetric(fields, "action_manage", "Action: Manage", "Count of 'Manage Settings' interactions.", aggregations.SUM);
+  addMetric(fields, "action_total", "Action: Total", "Total number of tracked user actions.", aggregations.SUM);
 
-  fields
-    .newMetric()
-    .setId("declined")
-    .setName("Banner Declined")
-    .setDescription("Number of times the banner was explicitly declined.")
-    .setType(types.NUMBER)
-    .setAggregation(aggregations.SUM);
+  addMetric(fields, "cat_functionality", "Category: Functionality", "Consent count for Functionality cookies.", aggregations.SUM);
+  addMetric(fields, "cat_targeting", "Category: Targeting", "Consent count for Targeting cookies.", aggregations.SUM);
+  addMetric(fields, "cat_performance", "Category: Performance", "Consent count for Performance cookies.", aggregations.SUM);
+  addMetric(fields, "cat_unclassified", "Category: Unclassified", "Consent count for Unclassified cookies.", aggregations.SUM);
 
-  fields
-    .newMetric()
-    .setId("action_accept")
-    .setName("Action: Accept")
-    .setDescription("Count of 'Accept' button clicks.")
-    .setType(types.NUMBER)
-    .setAggregation(aggregations.SUM);
-
-  fields
-    .newMetric()
-    .setId("action_reject")
-    .setName("Action: Reject")
-    .setDescription("Count of 'Reject' button clicks.")
-    .setType(types.NUMBER)
-    .setAggregation(aggregations.SUM);
-
-  fields
-    .newMetric()
-    .setId("action_readmore")
-    .setName("Action: Read More")
-    .setDescription("Count of 'Read More' interactions.")
-    .setType(types.NUMBER)
-    .setAggregation(aggregations.SUM);
-
-  fields
-    .newMetric()
-    .setId("action_close")
-    .setName("Action: Close")
-    .setDescription("Count of times the banner was closed without explicit choice.")
-    .setType(types.NUMBER)
-    .setAggregation(aggregations.SUM);
-
-  fields
-    .newMetric()
-    .setId("action_manage")
-    .setName("Action: Manage")
-    .setDescription("Count of 'Manage Settings' interactions.")
-    .setType(types.NUMBER)
-    .setAggregation(aggregations.SUM);
-
-  fields
-    .newMetric()
-    .setId("action_total")
-    .setName("Action: Total")
-    .setDescription("Total number of tracked user actions.")
-    .setType(types.NUMBER)
-    .setAggregation(aggregations.SUM);
-
-  fields
-    .newMetric()
-    .setId("cat_functionality")
-    .setName("Category: Functionality")
-    .setDescription("Consent count for Functionality cookies.")
-    .setType(types.NUMBER)
-    .setAggregation(aggregations.SUM);
-
-  fields
-    .newMetric()
-    .setId("cat_targeting")
-    .setName("Category: Targeting")
-    .setDescription("Consent count for Targeting cookies.")
-    .setType(types.NUMBER)
-    .setAggregation(aggregations.SUM);
-
-  fields
-    .newMetric()
-    .setId("cat_performance")
-    .setName("Category: Performance")
-    .setDescription("Consent count for Performance cookies.")
-    .setType(types.NUMBER)
-    .setAggregation(aggregations.SUM);
-
-  fields
-    .newMetric()
-    .setId("cat_unclassified")
-    .setName("Category: Unclassified")
-    .setDescription("Consent count for Unclassified cookies.")
-    .setType(types.NUMBER)
-    .setAggregation(aggregations.SUM);
-
-  fields
-    .newMetric()
-    .setId("total_accept_rate")
-    .setName("Accept Rate")
-    .setDescription("Overall accept rate as a percentage.")
-    .setType(types.NUMBER)
-    .setAggregation(aggregations.MAX);
-
-  fields
-    .newMetric()
-    .setId("total_reject_rate")
-    .setName("Reject Rate")
-    .setDescription("Overall reject rate as a percentage.")
-    .setType(types.NUMBER)
-    .setAggregation(aggregations.MAX);
-
-  fields
-    .newMetric()
-    .setId("total_ignore_rate")
-    .setName("Ignore Rate")
-    .setDescription("Overall ignore rate as a percentage.")
-    .setType(types.NUMBER)
-    .setAggregation(aggregations.MAX);
-
-  fields
-    .newMetric()
-    .setId("total_accept_count")
-    .setName("Accept Count")
-    .setDescription("Overall total accept count.")
-    .setType(types.NUMBER)
-    .setAggregation(aggregations.MAX);
-
-  fields
-    .newMetric()
-    .setId("total_reject_count")
-    .setName("Reject Count")
-    .setDescription("Overall total reject count.")
-    .setType(types.NUMBER)
-    .setAggregation(aggregations.MAX);
-
-  fields
-    .newMetric()
-    .setId("total_shown_count")
-    .setName("Shown Count")
-    .setDescription("Overall total banner shown count.")
-    .setType(types.NUMBER)
-    .setAggregation(aggregations.MAX);
+  addPercentMetric(fields, "total_accept_rate", "Accept Rate", "Overall accept rate as a percentage.", aggregations.AVG);
+  addPercentMetric(fields, "total_reject_rate", "Reject Rate", "Overall reject rate as a percentage.", aggregations.AVG);
+  addPercentMetric(fields, "total_ignore_rate", "Ignore Rate", "Overall ignore rate as a percentage.", aggregations.AVG);
 
   return fields;
 }
@@ -202,9 +91,66 @@ function getSchema() {
   return { schema: getFields().build() };
 }
 
-function getData(request) {
-  const baseUrl = "https://cookie-script.com";
+function buildUrl(itemId, startDate, endDate) {
+  let url = BASE_URL + "/api/open/v1/analytics/looker-studio?id=" + encodeURIComponent(itemId);
 
+  if (startDate && endDate) {
+    url += "&dateFrom=" + encodeURIComponent(startDate);
+    url += "&dateTo=" + encodeURIComponent(endDate);
+  }
+
+  return url;
+}
+
+function buildBearerToken(apiToken) {
+  return /^bearer\s+/i.test(apiToken) ? apiToken : "Bearer " + apiToken;
+}
+
+function fetchJson(url, authHeader) {
+  let response;
+
+  try {
+    response = UrlFetchApp.fetch(url, {
+      method: "get",
+      muteHttpExceptions: true,
+      headers: {
+        Accept: "application/json",
+        Authorization: authHeader
+      }
+    });
+  } catch (e) {
+    communityConnector.newUserError()
+      .setText("Network error while calling API.")
+      .setDebugText(String(e))
+      .throwException();
+  }
+
+  const statusCode = response.getResponseCode();
+  const body = response.getContentText();
+
+  if (statusCode !== 200) {
+    communityConnector.newUserError()
+      .setText("API request failed. HTTP Status: " + statusCode)
+      .setDebugText(body)
+      .throwException();
+  }
+
+  try {
+    return JSON.parse(body);
+  } catch (e) {
+    communityConnector.newUserError()
+      .setText("Invalid response from API (expected JSON).")
+      .setDebugText(body)
+      .throwException();
+  }
+}
+
+function safeNumber(v) {
+  const n = Number(v);
+  return isNaN(n) ? 0 : n;
+}
+
+function getData(request) {
   const apiToken = (request.configParams?.apiToken || "").trim();
   const itemId = (request.configParams?.itemId || "").trim();
 
@@ -222,90 +168,59 @@ function getData(request) {
     endDate = `${endDate.substring(0,4)}-${endDate.substring(4,6)}-${endDate.substring(6,8)}`;
   }
 
-  let url =
-    `${baseUrl}/api/open/v1/analytics/looker-studio` +
-    `?id=${encodeURIComponent(itemId)}`;
+  const url = buildUrl(itemId, startDate, endDate);
+  const authHeader = buildBearerToken(apiToken);
 
-  if (startDate && endDate) {
-    url += `&dateFrom=${startDate}&dateTo=${endDate}`;
-  }
+  const resp = fetchJson(url, authHeader);
 
-  let token = apiToken;
-
-  if (!token.toLowerCase().startsWith("bearer ")) {
-    token = "Bearer " + token;
-  }
-
-  const resp = UrlFetchApp.fetch(url, {
-    method: "get",
-    muteHttpExceptions: true,
-    headers: {
-      Accept: "application/json",
-      Authorization: token,
-    },
-  });
-
-  const code = resp.getResponseCode();
-  const body = resp.getContentText();
-
-  if (code !== 200) {
+  if (!resp.success) {
     communityConnector.newUserError()
-      .setText(`API request failed. HTTP Status: ${code}`)
-      .setDebugText(body)
+      .setText(`API Error: ${resp.message || "Unknown error"}`)
       .throwException();
   }
 
-  let payload;
-
-  try {
-    payload = JSON.parse(body);
-  } catch (e) {
-    communityConnector.newUserError()
-      .setText("Invalid response from API (expected JSON).")
-      .setDebugText(`Body: ${body}`)
-      .throwException();
-  }
-
-  if (!payload.success) {
-    communityConnector.newUserError()
-      .setText(`API Error: ${payload.message || "Unknown error"}`)
-      .throwException();
-  }
-
-  const data = payload.data || {};
-
+  const data = resp.data || {};
   const mergedData = {};
 
   const processArray = (arr, mapper) => {
     if (!Array.isArray(arr)) return;
+
     arr.forEach(entry => {
       const day = entry.day;
       if (!day) return;
+
       if (!mergedData[day]) mergedData[day] = {};
+
       mapper(entry, mergedData[day]);
     });
   };
 
   processArray(data.dailyConsent, (entry, target) => {
-    target.shown = entry.shown;
-    target.accepted = entry.accepted;
-    target.declined = entry.declined;
+    target.shown = safeNumber(entry.shown);
+    target.accepted = safeNumber(entry.accepted);
+    target.declined = safeNumber(entry.declined);
   });
 
   processArray(data.dailyActions, (entry, target) => {
-    target.action_accept = entry.accept;
-    target.action_reject = entry.reject;
-    target.action_readmore = entry.readmore;
-    target.action_close = entry.close;
-    target.action_manage = entry.manage;
-    target.action_total = entry.total;
+    target.action_accept = safeNumber(entry.accept);
+    target.action_reject = safeNumber(entry.reject);
+    target.action_readmore = safeNumber(entry.readmore);
+    target.action_close = safeNumber(entry.close);
+    target.action_manage = safeNumber(entry.manage);
+    target.action_total = safeNumber(entry.total);
   });
 
   processArray(data.dailyCategories, (entry, target) => {
-    target.cat_functionality = entry.functionality;
-    target.cat_targeting = entry.targeting;
-    target.cat_performance = entry.performance;
-    target.cat_unclassified = entry.unclassified;
+    target.cat_functionality = safeNumber(entry.functionality);
+    target.cat_targeting = safeNumber(entry.targeting);
+    target.cat_performance = safeNumber(entry.performance);
+    target.cat_unclassified = safeNumber(entry.unclassified);
+  });
+
+  processArray(data.dailyRates, (entry, target) => {
+    target.total_accept_rate = safeNumber(entry.acceptRate) / 100;
+    target.total_reject_rate = safeNumber(entry.rejectRate) / 100;
+    target.total_ignore_rate = safeNumber(entry.ignoreRate) / 100;
   });
 
   const requestedFieldIds = (request.fields || [])
@@ -317,30 +232,22 @@ function getData(request) {
     return String(ymd).replace(/-/g, "");
   };
 
-  const rows = Object.keys(mergedData).map(day => {
-    const dayData = mergedData[day];
-    const rates = data.totalRates || {};
-    return {
-      values: requestedFieldIds.map(id => {
-        if (id === "day") return formatYMD(day);
-        
-        if (id === "total_accept_rate") return Number(rates.percentage?.acceptRate || 0);
-        if (id === "total_reject_rate") return Number(rates.percentage?.rejectRate || 0);
-        if (id === "total_ignore_rate") return Number(rates.percentage?.ignoreRate || 0);
-        if (id === "total_accept_count") return Number(rates.total?.accept || 0);
-        if (id === "total_reject_count") return Number(rates.total?.reject || 0);
-        if (id === "total_shown_count") return Number(rates.total?.firstShown || 0);
+  const rows = Object.keys(mergedData)
+    .sort()
+    .map(day => {
+      const dayData = mergedData[day];
 
-        const val = dayData[id];
-
-        return val !== undefined ? Number(val) : 0;
-      })
-    };
-  });
+      return {
+        values: requestedFieldIds.map(id => {
+          if (id === "day") return formatYMD(day);
+          return safeNumber(dayData[id]);
+        })
+      };
+    });
 
   return {
     schema: getFields().forIds(requestedFieldIds).build(),
-    rows: rows,
+    rows: rows
   };
 }
 
