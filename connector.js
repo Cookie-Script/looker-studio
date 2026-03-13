@@ -14,15 +14,15 @@ function getConfig() {
   config
     .newTextInput()
     .setId("apiToken")
-    .setName("API Token (Bearer)")
+    .setName("API Token")
     .setPlaceholder("Enter your API Key")
-    .setHelpText("Find this in your Cookie-Script account settings.")
+    .setHelpText("Used to access your Cookie-Script analytics data.")
     .setAllowOverride(true);
 
   config
     .newTextInput()
     .setId("itemId")
-    .setName("Item ID (Hash)")
+    .setName("Item ID")
     .setPlaceholder("e.g. c0db4b49e05321b0...")
     .setHelpText("The unique hash ID for the cookie banner.")
     .setAllowOverride(true);
@@ -253,4 +253,10 @@ function getData(request) {
 
 function isAdminUser() {
   return false;
+}
+
+function isAuthValid(request) {
+  const apiToken = (request.configParams?.apiToken || "").trim();
+  const itemId = (request.configParams?.itemId || "").trim();
+  return apiToken && itemId;
 }
