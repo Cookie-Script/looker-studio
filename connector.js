@@ -1,5 +1,5 @@
 const communityConnector = DataStudioApp.createCommunityConnector();
-const BASE_URL = "https://t6.cookie-script.com";
+const BASE_URL = "https://cookie-script.com";
 
 function getAuthType() {
   return communityConnector
