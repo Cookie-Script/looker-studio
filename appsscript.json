@@ -9,12 +9,24 @@
     "https://cookie-script.com/"
   ],
   "dataStudio": {
-    "name": "CookieScript Connector",
+    "name": "CookieScript",
     "logoUrl": "https://www.cookie-script.com/images/cookie.png",
     "company": "CookieScript",
-    "companyUrl": "https://www.cookie-script.com",
-    "addonUrl": "https://www.cookie-script.com",
-    "supportUrl": "https://help.cookie-script.com",
-    "description": "Connect CookieScript analytics data to Looker Studio dashboards."
+    "companyUrl": "https://cookie-script.com",
+    "addOnUrl": "https://help.cookie-script.com/en/articles/53012-how-to-connect-cookiescript-analytics-to-google-looker-studio",
+    "supportUrl": "https://cookie-script.com/support",
+    "privacyPolicyUrl": "https://cookie-script.com/legal/privacy-policy",
+    "termsOfServiceUrl": "https://cookie-script.com/legal/terms-of-service",
+    "shortDescription": "Analyze CookieScript banner analytics in Looker Studio.",
+    "description": "Use this data source to import CookieScript banner analytics into Looker Studio. A CookieScript account and API key are required. Sign up at CookieScript, then generate your API key in the CookieScript dashboard and use it to connect your banner analytics data.",
+    "authType": [
+      "KEY"
+    ],
+    "feeType": [
+      "FREE"
+    ],
+    "sources": [
+      "WEB_ANALYTICS"
+    ]
   }
 }
